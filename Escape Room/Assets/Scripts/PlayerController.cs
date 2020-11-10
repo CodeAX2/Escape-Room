@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour {
     // Start is called before the first frame update
@@ -13,18 +14,27 @@ public class PlayerController : MonoBehaviour {
     public float sprintSpeed = 3.0f;
 
 
+    public TextMeshProUGUI pickupText;
+    private PickUpAble lookingAt;
+
+
+    private List<string> inventory;
+
     private Rigidbody rb;
 
 
     private void Start() {
         Cursor.lockState = CursorLockMode.Locked;
+
+        inventory = new List<string>();
+
         rb = GetComponent<Rigidbody>();
     }
 
     private void Update() {
         UpdateCamera();
         MovePlayer();
-
+        HandlePickups();
     }
 
     private void UpdateCamera() {
@@ -62,5 +72,49 @@ public class PlayerController : MonoBehaviour {
         rb.velocity = newVelocity;
 
     }
+
+    private void HandlePickups() {
+        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit)) {
+            lookingAt = hit.collider.gameObject.GetComponent<PickUpAble>();
+            if (lookingAt == null) {
+                pickupText.enabled = false;
+            } else {
+
+
+                pickupText.SetText("[E] - Pick Up " + lookingAt.GetItemName());
+                pickupText.enabled = true;
+            }
+        }
+
+        if (Input.GetAxisRaw("PickUp") >= 0.5 && lookingAt != null) {
+            lookingAt.PickUp(this);
+        }
+
+    }
+
+    public void AddItemToInventory(string itemName) {
+        inventory.Add(itemName);
+    }
+
+    public bool InventoryContains(string itemName) {
+        return inventory.Contains(itemName);
+    }
+
+    public int AmountInInventory(string itemName) {
+        int total = 0;
+        foreach (string item in inventory) {
+
+            if (item.Equals(itemName)) total++;
+
+        }
+        return total;
+    }
+
+    public void RemoveItemFromInventory(string itemName) {
+        inventory.Remove(itemName);
+    }
+
 
 }
