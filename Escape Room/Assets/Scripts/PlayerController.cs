@@ -29,6 +29,8 @@ public class PlayerController : MonoBehaviour {
         inventory = new List<string>();
 
         rb = GetComponent<Rigidbody>();
+
+        pickupText.enabled = false;
     }
 
     private void Update() {
