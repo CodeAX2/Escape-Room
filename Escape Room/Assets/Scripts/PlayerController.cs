@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour {
         UpdateCamera();
         MovePlayer();
         HandlePickups();
+        HandleInteract();
     }
 
     private void UpdateCamera() {
@@ -116,6 +117,35 @@ public class PlayerController : MonoBehaviour {
 
     public void RemoveItemFromInventory(string itemName) {
         inventory.Remove(itemName);
+    }
+
+
+    private bool interactWasDown = false;
+
+
+    private void HandleInteract() {
+        Interactable interactingWith = null;
+        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit)) {
+            interactingWith = hit.collider.gameObject.GetComponent<Interactable>();
+            if (interactingWith == null) {
+                pickupText.enabled = false;
+            } else {
+
+
+                pickupText.SetText("[E] - Interact ");
+                pickupText.enabled = true;
+            }
+        }
+
+        if (Input.GetAxisRaw("PickUp") >= 0.5 && interactingWith != null && !interactWasDown) {
+            interactingWith.OnInteract();
+            interactWasDown = true;
+        } else if (Input.GetAxisRaw("PickUp") < 0.5) {
+            interactWasDown = false;
+        }
+
     }
 
 
