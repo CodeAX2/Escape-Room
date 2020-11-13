@@ -5,6 +5,7 @@ using TMPro;
 
 public interface Interactable {
 
-    void OnInteract();
+    void OnInteract(PlayerController interactor);
+    string GetInteractText();
 
 }

@@ -4,13 +4,15 @@ using UnityEngine;
 using TMPro;
 using System;
 
-public class KeypadController : MonoBehaviour {
+public class KeypadController : MonoBehaviour, Interactable {
 
-    GameObject digitizer, keyContainer;
-
-    TextMeshPro digitizerText;
+    private GameObject digitizer, keyContainer;
+    private TextMeshPro digitizerText;
+    private Camera keypadCamera;
 
     public int code;
+
+    public GameObject connectedDoor;
 
 
     void Start() {
@@ -25,6 +27,9 @@ public class KeypadController : MonoBehaviour {
                 digitizer = curChild;
             } else if (curChild.CompareTag("KeyContainer")) {
                 keyContainer = curChild;
+            } else if (curChild.CompareTag("KeypadCamera")) {
+                keypadCamera = curChild.GetComponent<Camera>();
+                keypadCamera.enabled = false;
             }
         }
 
@@ -32,6 +37,7 @@ public class KeypadController : MonoBehaviour {
         digitizerText.text = "";
 
 
+        // Setup each of the keys
         for (int i = 0; i < keyContainer.transform.childCount; i++) {
             GameObject curKey = keyContainer.transform.GetChild(i).gameObject;
             curKey.AddComponent<KeyController>();
@@ -46,6 +52,13 @@ public class KeypadController : MonoBehaviour {
 
         }
 
+        // Create the code
+        System.Random r = new System.Random();
+        for (int i = 0; i < 4; i++) {
+            code += (int)Math.Pow(10, i) * r.Next(1, 10);
+        }
+
+
     }
 
     // Update is called once per frame
@@ -58,10 +71,9 @@ public class KeypadController : MonoBehaviour {
 
         if (Int32.Parse(digitizerText.text) == code) {
 
-            Debug.Log("Correct code!");
+            connectedDoor.SetActive(false);
 
         } else {
-            Debug.Log("Incorrect code!");
             ClearCode();
         }
 
@@ -69,19 +81,23 @@ public class KeypadController : MonoBehaviour {
     }
 
     public void ClearCode() {
-
         digitizerText.text = "";
-
     }
 
     public void AddNumber(int number) {
 
         if (digitizerText.text.Length < 4) {
-
             digitizerText.text += number.ToString();
-
         }
 
+    }
+
+    public void OnInteract(PlayerController interactor) {
+        interactor.UseInteractCamera(keypadCamera, gameObject);
+    }
+
+    public string GetInteractText() {
+        return "View Keypad";
     }
 
 }

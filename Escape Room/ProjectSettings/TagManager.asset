@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Digitizer
   - KeyContainer
+  - KeypadCamera
   layers:
   - Default
   - TransparentFX

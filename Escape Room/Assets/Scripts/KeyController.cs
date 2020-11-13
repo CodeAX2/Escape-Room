@@ -29,7 +29,7 @@ public class KeyController : MonoBehaviour, Interactable {
         this.function = function;
     }
 
-    public void OnInteract() {
+    public void OnInteract(PlayerController interactor) {
 
         if (function >= KeyFunction.ONE && function <= KeyFunction.NINE) {
             controller.AddNumber((int)function);
@@ -39,6 +39,10 @@ public class KeyController : MonoBehaviour, Interactable {
             controller.EnterCode();
         }
 
+    }
+
+    public string GetInteractText() {
+        return "Press Key";
     }
 
 

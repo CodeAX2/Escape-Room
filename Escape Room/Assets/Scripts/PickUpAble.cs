@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickUpAble : MonoBehaviour {
+public class PickUpAble : MonoBehaviour, Interactable {
 
     public string itemName;
 
@@ -12,10 +12,15 @@ public class PickUpAble : MonoBehaviour {
         effect.transform.parent = transform;
     }
 
-    public void PickUp(PlayerController picker) {
-        picker.AddItemToInventory(itemName);
+    public void OnInteract(PlayerController interactor){
+        interactor.AddItemToInventory(itemName);
         Destroy(gameObject);
     }
+
+    public string GetInteractText(){
+        return " Pick Up " + itemName;
+    }
+
 
     public string GetItemName() {
         return itemName;
