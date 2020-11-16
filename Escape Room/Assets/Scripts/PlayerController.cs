@@ -212,6 +212,12 @@ public class PlayerController : Saveable {
         inventory = s.inventory;
 
         file.Close();
+
+        foreach (string itemName in inventory) {
+            PickUpAble.RemoveItemByName(itemName);
+        }
+
+
     }
 
 
