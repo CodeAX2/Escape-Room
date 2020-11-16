@@ -1,19 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
+using System.IO;
+using System.Text;
 using UnityEngine;
 using TMPro;
-using System;
-
-public class KeypadController : MonoBehaviour, Interactable {
+public class KeypadController : Saveable, Interactable {
 
     private GameObject digitizer, keyContainer;
     private TextMeshPro digitizerText;
     private Camera keypadCamera;
 
-    public int code;
+    public int code = 0;
 
     public GameObject connectedDoor;
 
+    private bool isOpen = false;
 
     void Start() {
         SetupKeypad();
@@ -52,18 +54,18 @@ public class KeypadController : MonoBehaviour, Interactable {
 
         }
 
-        // Create the code
-        System.Random r = new System.Random();
-        for (int i = 0; i < 4; i++) {
-            code += (int)Math.Pow(10, i) * r.Next(1, 10);
+        if (code == 0) {
+            // Create the code
+            System.Random r = new System.Random();
+            for (int i = 0; i < 4; i++) {
+                code += (int)Math.Pow(10, i) * r.Next(1, 10);
+            }
         }
-
 
     }
 
     // Update is called once per frame
     void Update() {
-
     }
 
 
@@ -71,6 +73,7 @@ public class KeypadController : MonoBehaviour, Interactable {
 
         if (Int32.Parse(digitizerText.text) == code) {
 
+            isOpen = true;
             connectedDoor.SetActive(false);
 
         } else {
@@ -99,5 +102,55 @@ public class KeypadController : MonoBehaviour, Interactable {
     public string GetInteractText() {
         return "View Keypad";
     }
+
+    public override void SaveToFile() {
+
+        Saver s = new Saver();
+        s.code = code;
+        s.isOpen = isOpen;
+        string json = JsonUtility.ToJson(s);
+
+
+        FileStream file = new FileStream(fileName, FileMode.Truncate);
+
+        byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+        file.Write(jsonBytes, 0, jsonBytes.Length);
+
+        file.Close();
+
+    }
+
+    public override void LoadFromFile() {
+
+        FileStream file = new FileStream(fileName, FileMode.OpenOrCreate);
+
+        byte[] jsonBytes = new byte[file.Length];
+        if (file.Length == 0) {
+            file.Close();
+            return;
+        }
+        file.Read(jsonBytes, 0, (int)file.Length);
+
+        string json = Encoding.UTF8.GetString(jsonBytes, 0, jsonBytes.Length);
+        Saver s = JsonUtility.FromJson<Saver>(json);
+
+        code = s.code;
+        isOpen = s.isOpen;
+
+        if (isOpen) connectedDoor.SetActive(false);
+
+        file.Close();
+
+
+    }
+
+    [Serializable]
+    private class Saver {
+
+        public int code;
+        public bool isOpen;
+
+    }
+
 
 }

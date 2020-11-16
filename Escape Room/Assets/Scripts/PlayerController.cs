@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.IO;
+using System;
+using System.Text;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : Saveable {
     // Start is called before the first frame update
 
     public Camera playerCamera;
@@ -193,5 +196,45 @@ public class PlayerController : MonoBehaviour {
         return interactingWith.Equals(other);
     }
 
+    public override void LoadFromFile() {
+        FileStream file = new FileStream(fileName, FileMode.OpenOrCreate);
+
+        byte[] jsonBytes = new byte[file.Length];
+        if (file.Length == 0) {
+            file.Close();
+            return;
+        }
+        file.Read(jsonBytes, 0, (int)file.Length);
+
+        string json = Encoding.UTF8.GetString(jsonBytes, 0, jsonBytes.Length);
+        Saver s = JsonUtility.FromJson<Saver>(json);
+
+        inventory = s.inventory;
+
+        file.Close();
+    }
+
+
+    public override void SaveToFile() {
+
+        Saver s = new Saver();
+        s.inventory = inventory;
+        string json = JsonUtility.ToJson(s);
+
+        FileStream file = new FileStream(fileName, FileMode.Truncate);
+
+        byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+        file.Write(jsonBytes, 0, jsonBytes.Length);
+
+        file.Close();
+
+    }
+
+    [Serializable]
+    private class Saver {
+
+        public List<string> inventory;
+
+    }
 
 }

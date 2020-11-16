@@ -2757,7 +2757,7 @@ GameObject:
   - component: {fileID: 967349248}
   - component: {fileID: 967349249}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Player - RM1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4779,7 +4779,7 @@ GameObject:
   - component: {fileID: 1726061660}
   - component: {fileID: 1726061661}
   m_Layer: 0
-  m_Name: Keypad
+  m_Name: Keypad - RM1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
