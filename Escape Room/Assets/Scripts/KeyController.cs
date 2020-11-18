@@ -31,6 +31,8 @@ public class KeyController : MonoBehaviour, Interactable {
 
     public void OnInteract(PlayerController interactor) {
 
+        AudioSource.PlayClipAtPoint(controller.keySound, transform.position);
+
         if (function >= KeyFunction.ONE && function <= KeyFunction.NINE) {
             controller.AddNumber((int)function);
         } else if (function == KeyFunction.CLEAR) {

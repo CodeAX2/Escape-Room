@@ -173,7 +173,7 @@ public class PlayerController : Saveable {
         initialInteractCameraRotation = interactCamera.transform.rotation;
         this.interactCamera.gameObject.SetActive(true);
         this.interactingWith = interactingWith;
-        this.interactingWith.gameObject.GetComponent<BoxCollider>().enabled = false;
+        this.interactingWith.gameObject.GetComponent<Collider>().enabled = false;
         playerCamera.gameObject.SetActive(false);
         interacting = true;
         this.interactCamera.enabled = true;
@@ -185,7 +185,7 @@ public class PlayerController : Saveable {
         this.interactCamera.enabled = false;
         interactCamera.gameObject.SetActive(false);
         interactCamera = null;
-        interactingWith.gameObject.GetComponent<BoxCollider>().enabled = true;
+        interactingWith.gameObject.GetComponent<Collider>().enabled = true;
         interactingWith = null;
         playerCamera.gameObject.SetActive(true);
         interacting = false;
@@ -197,7 +197,8 @@ public class PlayerController : Saveable {
     }
 
     public override void LoadFromFile() {
-        FileStream file = new FileStream(fileName, FileMode.OpenOrCreate);
+        Directory.CreateDirectory(Path.GetDirectoryName(GetFileName()));
+        FileStream file = new FileStream(GetFileName(), FileMode.OpenOrCreate);
 
         byte[] jsonBytes = new byte[file.Length];
         if (file.Length == 0) {
@@ -227,7 +228,8 @@ public class PlayerController : Saveable {
         s.inventory = inventory;
         string json = JsonUtility.ToJson(s);
 
-        FileStream file = new FileStream(fileName, FileMode.Truncate);
+        Directory.CreateDirectory(Path.GetDirectoryName(GetFileName()));
+        FileStream file = new FileStream(GetFileName(), FileMode.Truncate);
 
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
         file.Write(jsonBytes, 0, jsonBytes.Length);

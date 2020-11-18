@@ -14,6 +14,7 @@ public class KeypadController : Saveable, Interactable {
     public int code = 0;
 
     public GameObject connectedDoor;
+    public AudioClip keySound, acceptSound, denySound;
 
     private bool isOpen = false;
 
@@ -62,6 +63,8 @@ public class KeypadController : Saveable, Interactable {
             }
         }
 
+        GameController.GetInstance().officerText.text = code.ToString();
+
     }
 
     // Update is called once per frame
@@ -73,11 +76,15 @@ public class KeypadController : Saveable, Interactable {
 
         if (Int32.Parse(digitizerText.text) == code) {
 
+            AudioSource.PlayClipAtPoint(acceptSound, transform.position);
             isOpen = true;
             connectedDoor.SetActive(false);
 
         } else {
+
+            AudioSource.PlayClipAtPoint(denySound, transform.position);
             ClearCode();
+
         }
 
 
@@ -110,8 +117,8 @@ public class KeypadController : Saveable, Interactable {
         s.isOpen = isOpen;
         string json = JsonUtility.ToJson(s);
 
-
-        FileStream file = new FileStream(fileName, FileMode.Truncate);
+        Directory.CreateDirectory(Path.GetDirectoryName(GetFileName()));
+        FileStream file = new FileStream(GetFileName(), FileMode.Truncate);
 
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
         file.Write(jsonBytes, 0, jsonBytes.Length);
@@ -122,7 +129,8 @@ public class KeypadController : Saveable, Interactable {
 
     public override void LoadFromFile() {
 
-        FileStream file = new FileStream(fileName, FileMode.OpenOrCreate);
+        Directory.CreateDirectory(Path.GetDirectoryName(GetFileName()));
+        FileStream file = new FileStream(GetFileName(), FileMode.OpenOrCreate);
 
         byte[] jsonBytes = new byte[file.Length];
         if (file.Length == 0) {
@@ -138,6 +146,7 @@ public class KeypadController : Saveable, Interactable {
         isOpen = s.isOpen;
 
         if (isOpen) connectedDoor.SetActive(false);
+        GameController.GetInstance().officerText.text = code.ToString();
 
         file.Close();
 

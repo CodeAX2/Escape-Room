@@ -7,6 +7,7 @@ public class PickUpAble : MonoBehaviour, Interactable {
     public string itemName;
     public string displayName;
 
+    public AudioClip pickupSound;
     private static List<PickUpAble> allItems;
 
     public static void RemoveItemByName(string itemName) {
@@ -35,6 +36,7 @@ public class PickUpAble : MonoBehaviour, Interactable {
 
     public void OnInteract(PlayerController interactor) {
         interactor.AddItemToInventory(itemName);
+        AudioSource.PlayClipAtPoint(pickupSound, transform.position);
         Destroy(gameObject);
     }
 
