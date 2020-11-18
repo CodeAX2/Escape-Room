@@ -17,7 +17,7 @@ public class PlayerController : Saveable {
 
 
     public float interactDistance = 2.0f;
-    public TextMeshProUGUI interactText;
+    public TextMeshProUGUI interactText, exitText;
     private Interactable lookingAt;
     private bool interactWasDown;
     private Camera interactCamera;
@@ -40,6 +40,7 @@ public class PlayerController : Saveable {
         rb = GetComponent<Rigidbody>();
 
         interactText.enabled = false;
+        exitText.enabled = false;
     }
 
     private void Update() {
@@ -177,6 +178,7 @@ public class PlayerController : Saveable {
         playerCamera.gameObject.SetActive(false);
         interacting = true;
         this.interactCamera.enabled = true;
+        exitText.enabled = true;
     }
 
     public void ResetInteracting() {
@@ -190,6 +192,7 @@ public class PlayerController : Saveable {
         playerCamera.gameObject.SetActive(true);
         interacting = false;
         Cursor.lockState = CursorLockMode.Locked;
+        exitText.enabled = false;
     }
 
     public bool IsInteractingWith(GameObject other) {
