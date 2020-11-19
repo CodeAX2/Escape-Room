@@ -1,8 +1,35 @@
 fileFormatVersion: 2
-guid: 3489e0d38e034e047ab18d8f3ffbc35c
+guid: 350e376ffb8dffd4eaa69c9676bb5d1c
 ModelImporter:
   serializedVersion: 20101
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      74: 9036694105013053538
+    second: Cube|Cube.001Action
+  - first:
+      74: -2235298856490809118
+    second: Cube|EmptyAction
+  - first:
+      74: 7869579155339608498
+    second: Cube|Shader NodetreeAction
+  - first:
+      74: -8515560403302317629
+    second: Cube.001|Cube.001Action
+  - first:
+      74: 3184363665406777747
+    second: Cube.001|EmptyAction
+  - first:
+      74: 6811843325399911832
+    second: Cube.001|Shader NodetreeAction
+  - first:
+      74: -3915131422061517104
+    second: Empty|Cube.001Action
+  - first:
+      74: -5572541973309549404
+    second: Empty|EmptyAction
+  - first:
+      74: -3866614641588323457
+    second: Empty|Shader NodetreeAction
   externalObjects: {}
   materials:
     materialImportMode: 1
