@@ -8,8 +8,10 @@ public class PoliceController : MonoBehaviour, Interactable {
 
     public AudioClip maskRequiredSound, maskGoodSound;
 
-    void Start() {
+    private Animator animator;
 
+    void Start() {
+        animator = GetComponent<Animator>();
     }
 
     void Update() {
@@ -21,11 +23,21 @@ public class PoliceController : MonoBehaviour, Interactable {
         interactor.UseInteractCamera(interactCamera, gameObject);
         if (!interactor.InventoryContains("Mask - RM1")) {
             AudioSource.PlayClipAtPoint(maskRequiredSound, transform.position);
+            animator.SetTrigger("DenyTrigger");
         } else {
             AudioSource.PlayClipAtPoint(maskGoodSound, transform.position);
+            animator.SetTrigger("CheerTrigger");
+            GameController.GetInstance().StopTimer();
+            Invoke("ClearLevel", maskGoodSound.length);
         }
 
     }
+
+
+    private void ClearLevel() {
+        GameController.GetInstance().ClearLevel();
+    }
+
     public string GetInteractText() {
         return "Talk to Officer";
     }

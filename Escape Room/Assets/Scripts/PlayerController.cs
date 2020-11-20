@@ -18,6 +18,7 @@ public class PlayerController : Saveable {
 
     public float interactDistance = 2.0f;
     public TextMeshProUGUI interactText, exitText;
+    public GameObject maskImage, keyImage;
     private Interactable lookingAt;
     private bool interactWasDown;
     private Camera interactCamera;
@@ -47,6 +48,7 @@ public class PlayerController : Saveable {
         UpdateCamera();
         MovePlayer();
         HandleInteract();
+        UpdateUI();
     }
 
     private void UpdateCamera() {
@@ -137,6 +139,13 @@ public class PlayerController : Saveable {
         if (interactingWith != null && !interactingWith.activeInHierarchy) {
             ResetInteracting();
         }
+
+    }
+
+    private void UpdateUI() {
+
+        maskImage.SetActive(InventoryContains("Mask - RM1"));
+        keyImage.SetActive(InventoryContains("CarKey - RM1"));
 
     }
 
