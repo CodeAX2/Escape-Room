@@ -35,6 +35,7 @@ public class PickUpAble : MonoBehaviour, Interactable {
         GameObject effect = Instantiate(GameController.GetInstance().pickUpParticleEffect);
         effect.transform.position += transform.position;
         effect.transform.parent = transform;
+        effect.transform.localScale = new Vector3(1, 1, 1);
     }
 
     public void OnInteract(PlayerController interactor) {

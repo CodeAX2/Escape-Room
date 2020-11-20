@@ -26,6 +26,7 @@ public class PlayerController : Saveable {
     private Quaternion initialInteractCameraRotation;
     private bool interacting = false;
     private GameObject interactingWith = null;
+    public Animator playerAnimator;
 
 
     private List<string> inventory;
@@ -95,6 +96,12 @@ public class PlayerController : Saveable {
         newVelocity.y = rb.velocity.y;
 
         rb.velocity = newVelocity;
+
+        if (rb.velocity.magnitude >= 0.05f) {
+            playerAnimator.SetBool("walking", true);
+        } else {
+            playerAnimator.SetBool("walking", false);
+        }
 
     }
 
