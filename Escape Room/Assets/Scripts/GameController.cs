@@ -12,7 +12,9 @@ public class GameController : Saveable {
     private static GameController gameController;
 
     public GameObject pickUpParticleEffect;
-    public string saveFolder;
+    public AudioSource backgroundMusic;
+    private bool playAudio;
+    public string room1Save, room2Save;
     public TextMeshProUGUI countdownText;
     public Color solvedCountdownColor, runningCountdownColor;
     public float timeForSolve;
@@ -20,7 +22,22 @@ public class GameController : Saveable {
     public TextMeshPro officerText;
 
     private bool timerRunning = true;
+
+    public int levelNumber;
     public string nextSceneName;
+
+    protected new string GetFileName() {
+
+        string saveFolder = "";
+        if (levelNumber == 1) {
+            saveFolder = room1Save;
+        } else if (levelNumber == 2) {
+            saveFolder = room2Save;
+        }
+
+        if (fileName == null) fileName = saveFolder + "\\" + "GameController" + levelNumber + ".json";
+        return fileName;
+    }
 
     private new void Awake() {
         base.Awake();
@@ -39,8 +56,26 @@ public class GameController : Saveable {
     void Update() {
         if (timerRunning) {
             timeForSolve -= Time.deltaTime;
+            if (timeForSolve <= 0) {
+                Cursor.lockState = CursorLockMode.None;
+                SceneManager.LoadScene("MenuScene");
+            }
         }
         countdownText.text = timeForSolve.ToString("0.0") + "s";
+
+        if (Input.GetKeyDown(KeyCode.LeftAlt)) {
+            Cursor.lockState = CursorLockMode.None;
+            SceneManager.LoadScene("MenuScene");
+        }
+
+
+    }
+
+    public void PlayMusic() {
+        backgroundMusic = GetComponent<AudioSource>();
+        if (playAudio) {
+            backgroundMusic.Play();
+        }
     }
 
     public void StopTimer() {
@@ -61,6 +96,15 @@ public class GameController : Saveable {
         SceneManager.LoadScene(nextSceneName);
     }
 
+    public string GetSaveFolder() {
+        if (levelNumber == 1) {
+            return room1Save;
+        } else if (levelNumber == 2) {
+            return room2Save;
+        }
+        return "";
+    }
+
     public override void LoadFromFile() {
         Directory.CreateDirectory(Path.GetDirectoryName(GetFileName()));
         FileStream file = new FileStream(GetFileName(), FileMode.OpenOrCreate);
@@ -68,21 +112,37 @@ public class GameController : Saveable {
         byte[] jsonBytes = new byte[file.Length];
         if (file.Length == 0) {
             file.Close();
-            return;
-        }
-        file.Read(jsonBytes, 0, (int)file.Length);
-
-        string json = Encoding.UTF8.GetString(jsonBytes, 0, jsonBytes.Length);
-        Saver s = JsonUtility.FromJson<Saver>(json);
-
-        timeForSolve = s.timeForSolve;
-        if (s.timerRunning) {
-            StartTimer();
         } else {
-            StopTimer();
+            file.Read(jsonBytes, 0, (int)file.Length);
+
+            string json = Encoding.UTF8.GetString(jsonBytes, 0, jsonBytes.Length);
+            Saver s = JsonUtility.FromJson<Saver>(json);
+
+            timeForSolve = s.timeForSolve;
+            if (s.timerRunning) {
+                StartTimer();
+            } else {
+                StopTimer();
+            }
+
+            file.Close();
         }
 
-        file.Close();
+        // Get if audio should play
+        Directory.CreateDirectory("ERSettings");
+        file = new FileStream("ERSettings\\Settings.dat", FileMode.OpenOrCreate);
+
+        byte[] musicToggledData = new byte[file.Length];
+        if (file.Length == 0) {
+            file.Close();
+        } else {
+            file.Read(musicToggledData, 0, (int)file.Length);
+
+            playAudio = bool.Parse(Encoding.UTF8.GetString(musicToggledData, 0, musicToggledData.Length));
+            file.Close();
+        }
+
+        PlayMusic();
 
 
     }
@@ -107,7 +167,7 @@ public class GameController : Saveable {
     }
 
     [Serializable]
-    private class Saver {
+    public class Saver {
 
         public bool timerRunning;
         public float timeForSolve;

@@ -3,7 +3,7 @@ public abstract class Saveable : MonoBehaviour {
     public abstract void SaveToFile();
     public abstract void LoadFromFile();
 
-    private string fileName = null;
+    protected string fileName = null;
 
     protected void Awake() {
 
@@ -12,7 +12,7 @@ public abstract class Saveable : MonoBehaviour {
     }
 
     protected string GetFileName() {
-        if (fileName == null) fileName = GameController.GetInstance().saveFolder + "\\" + ToString() + ".json";
+        if (fileName == null) fileName = GameController.GetInstance().GetSaveFolder() + "\\" + ToString() + ".json";
         return fileName;
     }
 

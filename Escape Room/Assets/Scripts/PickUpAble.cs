@@ -37,6 +37,7 @@ public class PickUpAble : MonoBehaviour, Interactable {
     public void OnInteract(PlayerController interactor) {
         interactor.AddItemToInventory(itemName);
         AudioSource.PlayClipAtPoint(pickupSound, transform.position);
+        RemoveItemByName(itemName);
         Destroy(gameObject);
     }
 
