@@ -36,7 +36,7 @@ public class PlayerController : Saveable {
     private void Start() {
         Cursor.lockState = CursorLockMode.Locked;
 
-        inventory = new List<string>();
+        if (inventory == null) inventory = new List<string>();
 
         rb = GetComponent<Rigidbody>();
 
@@ -144,8 +144,10 @@ public class PlayerController : Saveable {
 
     private void UpdateUI() {
 
-        maskImage.SetActive(InventoryContains("Mask - RM1"));
-        keyImage.SetActive(InventoryContains("CarKey - RM1"));
+        if (maskImage != null)
+            maskImage.SetActive(InventoryContains("Mask - RM1"));
+        if (keyImage != null)
+            keyImage.SetActive(InventoryContains("CarKey - RM1"));
 
     }
 
@@ -229,7 +231,6 @@ public class PlayerController : Saveable {
         foreach (string itemName in inventory) {
             PickUpAble.RemoveItemByName(itemName);
         }
-
 
     }
 

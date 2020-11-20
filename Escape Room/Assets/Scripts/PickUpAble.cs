@@ -25,6 +25,9 @@ public class PickUpAble : MonoBehaviour, Interactable {
 
     private void Awake() {
         if (allItems == null) allItems = new List<PickUpAble>();
+        for (int i = allItems.Count - 1; i >= 0; i--) {
+            if (allItems[i] == null) allItems.RemoveAt(i);
+        }
         allItems.Add(this);
     }
 
@@ -38,7 +41,6 @@ public class PickUpAble : MonoBehaviour, Interactable {
         interactor.AddItemToInventory(itemName);
         AudioSource.PlayClipAtPoint(pickupSound, transform.position);
         RemoveItemByName(itemName);
-        Destroy(gameObject);
     }
 
     public string GetInteractText() {
