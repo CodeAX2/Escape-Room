@@ -4,6 +4,12 @@ ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable:
   - first:
+      74: -8051102449201487124
+    second: Cube|Action
+  - first:
+      74: 885944232402757753
+    second: Armature|Action
+  - first:
       74: 4781951162920444690
     second: Armature|ArmatureAction
   externalObjects: {}

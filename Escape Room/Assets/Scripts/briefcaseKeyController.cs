@@ -30,9 +30,9 @@ public class briefcaseKeyController : MonoBehaviour, Interactable {
             controller.upCode();
         } else if (function == KeyFunction.down) {
             controller.downCode();
-        }else if (function == KeyFunction.down) {
+        }else if (function == KeyFunction.right) {
             controller.rightCode();
-        }else if (function == KeyFunction.down) {
+        }else if (function == KeyFunction.left) {
             controller.leftCode();
         }
 
