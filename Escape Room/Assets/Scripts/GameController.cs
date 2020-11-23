@@ -15,7 +15,7 @@ public class GameController : Saveable {
     public AudioSource backgroundMusic;
     private bool playAudio;
     public string room1Save, room2Save;
-    public TextMeshProUGUI countdownText;
+    public TextMeshProUGUI countdownText, winText;
     public Color solvedCountdownColor, runningCountdownColor;
     public float timeForSolve;
 
@@ -94,6 +94,10 @@ public class GameController : Saveable {
 
     public void ClearLevel() {
         SceneManager.LoadScene(nextSceneName);
+    }
+
+    public void EnableWinText(){
+        winText.enabled = true;
     }
 
     public string GetSaveFolder() {

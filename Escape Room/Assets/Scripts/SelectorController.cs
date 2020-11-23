@@ -22,6 +22,7 @@ public class SelectorController : MonoBehaviour {
     public Toggle musicToggle;
 
     void Start() {
+        Cursor.lockState = CursorLockMode.None;
         originalRoom1ButtonColors = room1Button.colors;
         originalRoom2ButtonColors = room2Button.colors;
         LoadRoom1Button();
@@ -140,6 +141,7 @@ public class SelectorController : MonoBehaviour {
         if (room1Cleared) {
             // The room was cleared, so reset its data
             Directory.Delete(room1Directory, true);
+            Directory.Delete(room2Directory, true);
         }
         SceneManager.LoadScene("Level1");
     }

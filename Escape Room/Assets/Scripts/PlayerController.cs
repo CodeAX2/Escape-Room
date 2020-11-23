@@ -18,7 +18,7 @@ public class PlayerController : Saveable {
 
     public float interactDistance = 2.0f;
     public TextMeshProUGUI interactText, exitText;
-    public GameObject maskImage, keyImage;
+    public GameObject maskImage, keyImage, moneyImage, garbageImage, emptyGasImage, fullGasImage;
     private Interactable lookingAt;
     private bool interactWasDown;
     private Camera interactCamera;
@@ -155,6 +155,16 @@ public class PlayerController : Saveable {
             maskImage.SetActive(InventoryContains("Mask - RM1"));
         if (keyImage != null)
             keyImage.SetActive(InventoryContains("CarKey - RM1"));
+
+        if (moneyImage != null)
+            moneyImage.SetActive(InventoryContains("Money - RM2"));
+        if (garbageImage != null)
+            garbageImage.SetActive(InventoryContains("Trash - RM2") || InventoryContains("Trash2 - RM2"));
+        if (emptyGasImage != null)
+            emptyGasImage.SetActive(InventoryContains("GasTankEmpty - RM2"));
+        if (fullGasImage != null)
+            fullGasImage.SetActive(InventoryContains("GasTankFull - RM2"));
+
 
     }
 
